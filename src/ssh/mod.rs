@@ -13,6 +13,7 @@ pub struct SSHConnection {
     pub target: String,
 
     pub sess: Option<ssh2::Session>,
+    pub channel: Option<ssh2::Channel>,
 }
 
 impl SSHConnection {
@@ -21,6 +22,7 @@ impl SSHConnection {
             user: String::from(user),
             target: String::from(target),
             sess: None,
+            channel: None,
         };
     }
 
@@ -31,10 +33,11 @@ impl SSHConnection {
         sess.handshake()?;
         sess.userauth_agent(self.user.as_str())?;
 
-        let mut s = sess.channel_session()?;
-        s.subsystem("netconf")?;
+        let mut channel = sess.channel_session()?;
+        channel.subsystem("netconf")?;
 
         self.sess = Some(sess);
+        self.channel = Some(channel);
 
         return Ok(());
     }

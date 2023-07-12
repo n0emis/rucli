@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> {} }:
+{ pkgs ? import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/d8bb6c681cf86265fdcf3cc3119f757bbb085835.tar.gz") {} }:
   pkgs.mkShell rec {
     buildInputs = with pkgs; [
       clang
