@@ -76,14 +76,14 @@ impl NETCONFClient {
     fn send_rpc(&mut self, rpc: RPC) -> NETCONFResult<()> {
         let rpc_xml = to_string(&rpc)?;
         let payload = format!("{}\n]]>]]>\n", rpc_xml).replace("&quot;", "\"");
-        println!("{}", payload);
+        // println!("{}", payload);
         let wb = self.write(payload.as_bytes())?;
         return Ok(wb);
     }
 
     fn read_result(&mut self) -> NETCONFResult<RPCReply> {
         let str = self.read()?;
-        println!("{}", str);
+        // println!("{}", str);
         let conf_info: RPCReply = from_str(&str)?;
 
         // FIXME: Errors might not come first.
