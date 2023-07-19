@@ -91,8 +91,13 @@ impl NETCONFClient {
                         bad_element: x.error_info.bad_element.to_string(),
                     },
                     error_severity: x.error_severity.to_string(),
-                    error_path: x.error_path.to_string(),
+                    error_path: match &x.error_path {
+                        None => None,
+                        Some(error_path) => Some(error_path.to_string())
+                    },
                     error_message: x.error_message.to_string(),
+                    error_type: x.error_type.to_string(),
+                    error_tag: x.error_tag.to_string(),
                 };
                 return Err(rpc.into());
             }

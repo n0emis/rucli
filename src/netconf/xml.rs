@@ -186,10 +186,14 @@ pub struct RPCErrorList {
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct RPCError {
+    #[serde(rename = "error-type")]
+    pub error_type: String,
+    #[serde(rename = "error-tag")]
+    pub error_tag: String,
     #[serde(rename = "error-severity")]
     pub error_severity: String,
     #[serde(rename = "error-path")]
-    pub error_path: String,
+    pub error_path: Option<String>,
     #[serde(rename = "error-message")]
     pub error_message: String,
     #[serde(rename = "error-info")]
@@ -206,10 +210,13 @@ impl Display for RPCError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         writeln!(
             f,
-            "{} at {} {}",
-            self.error_severity, self.error_path, self.error_info.bad_element
+            "{}: {}",
+            self.error_severity, self.error_message
         )?;
-        writeln!(f, "{}", self.error_message)?;
+        if self.error_path.is_some() {
+            writeln!(f, "at {}", self.error_path.clone().unwrap())?;
+        }
+        writeln!(f, "{}", self.error_info.bad_element)?;
         Ok(())
     }
 }
